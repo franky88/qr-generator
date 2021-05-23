@@ -19,7 +19,7 @@
                 <option value="Facebook">Facebook</option>
               </select>
             </div>
-            <label for="logoimage" class="form-label">Company logo</label><br>
+            <label for="logoimage" class="form-label">Company logo</label>
             <div class="mb-3 input-group">
                 <input class="form-control form-control-sm" type="file" name="image" accept="image/png, image/jpeg" @change="getImageBase64">
             </div>
@@ -37,32 +37,39 @@
                 </div>
               </div>
             </div>
-            <button @click="generateQR" class="btn btn-outline-primary">Generate QR</button>
+            <button @click="generateQR" class="btn btn-outline-primary"><i class="bi bi-upc-scan"></i> Generate QR</button>
           </div>
         </div>
         <div class="col-sm-8">
             <div class="row">
                 <div class="col-sm-8">
-                    <div class="card" id="toPDFFile" style="text-align: center;">
+                    <div class="card" style="text-align: center;">
                         <div class="card-body">
-                            <h1 class="card-title">{{ busName }}</h1>
-                            <h4 style="text-align: center;">values your feedback.</h4>
-                            <br>
-                            <div id="qrcode" style="text-align: center;">
-                                <!-- <img :src="image.src" alt="" style="width:100px; z-index:20; position: float;"> -->
+                            <div id="toPDFFile">
+                                <h1 class="card-title" style="text-align: center;">{{ busName }}</h1>
+                                <h4 style="text-align: center;">values your feedback.</h4>
+                                <br>
+                                <div id="qrcode" style="text-align: center;">
+                                    <!-- <img :src="image.src" alt="" style="width:100px; z-index:20; position: float;"> -->
+                                </div>
+                                <br>
+                                <br>
+                                <h5 style="text-align: center;">
+                                    Please scan above to leave us a
+                                    <br> review on {{reviewFor}}!
+                                </h5>
+                                <br>
+                                <h4 style="text-align: center;">powered by</h4>
+                                <div style="text-align: center;">
+                                    <img src="../assets/AORlogo.png" alt="" style="width: 250px;">
+                                </div>
+                                <br>
                             </div>
-                            <br>
-                            <br>
-                            <h5>
-                                Please scan above to leave us a
-                                <br> review on {{reviewFor}}!
-                            </h5>
-                            <br>
                         </div>
                     </div>
-                    <button class="btn btn-outline-primary btn-sm" @click="savePDF">Save PDF</button>
                 </div>
                 <div class="col-sm-4">
+                    <button class="btn btn-outline-primary btn-sm" @click="savePDF"><i class="bi bi-save-fill"></i> Save PDF</button>
                 </div>
             </div>
         </div>
@@ -113,7 +120,7 @@ export default {
     getImageBase64(event){
         let file = event.target.files[0];
         let reader = new FileReader();
-        reader.onloadend = function() {
+        reader.onload = function() {
             // console.log('RESULT', reader.result)
             this.imageBase64 = reader.result
             console.log("Base64 "+this.imageBase64)
@@ -144,7 +151,6 @@ export default {
         new QRCode(this.generatedQRCode, options)
     },
     savePDF(){
-        console.log("working")
         var element = document.getElementById('toPDFFile');
         var opt = {
             margin: 0.5,
@@ -152,7 +158,7 @@ export default {
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             enableLinks: true,
-            jsPDF: { unit: 'in', format: "letter", orientation: 'portrait' }
+            jsPDF: { unit: 'in', format: [8.5, 8], orientation: 'portrait' }
         };
         html2pdf().set(opt).from(element).save();
     }

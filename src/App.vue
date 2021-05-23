@@ -15,8 +15,11 @@ export default {
 </script>
 
 <style>
+@font-face {
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap');
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Montserrat Avenir, Helvetica, Arial, sans-serif !important; 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */
