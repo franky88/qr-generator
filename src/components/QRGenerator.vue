@@ -22,7 +22,7 @@
             <label for="logoimage" class="form-label">Company logo</label>
             <div class="mb-3 input-group">
                 <input type="file" class="form-control form-control-sm" id="upImg" name="image" accept="image/png, image/jpeg" aria-describedby="uplFile" aria-label="Upload" @change="getImageBase64">
-                <button class="btn btn-outline-secondary btn-sm" type="button" id="uplFile" @click="uploadImg">Upload</button>
+                <button class="btn btn-outline-primary btn-sm" type="button" id="uplFile" @click="uploadImg">Upload</button>
             </div>
             <div v-show="image.src" class="card mb-3" style="max-width: 540px;">
               <div class="row g-0">
@@ -38,7 +38,7 @@
                 </div>
               </div>
             </div>
-            <button @click="generateQR" class="btn btn-outline-primary"><i class="bi bi-upc-scan"></i> Generate QR</button>
+            <button @click="generateQR" class="btn btn-outline-success"><i class="bi bi-upc-scan"></i> Generate QR</button>
           </div>
         </div>
         <div class="col-sm-8">
