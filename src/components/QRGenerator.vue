@@ -120,7 +120,7 @@ export default {
     getImageBase64(event){
         let file = event.target.files[0];
         let reader = new FileReader();
-        reader.onload = function() {
+        reader.onloadend = function() {
             // console.log('RESULT', reader.result)
             this.imageBase64 = reader.result
             console.log("Base64 "+this.imageBase64)
