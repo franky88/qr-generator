@@ -21,7 +21,8 @@
             </div>
             <label for="logoimage" class="form-label">Company logo</label>
             <div class="mb-3 input-group">
-                <input class="form-control form-control-sm" type="file" name="image" accept="image/png, image/jpeg" @change="getImageBase64">
+                <input type="file" class="form-control form-control-sm" id="upImg" name="image" accept="image/png, image/jpeg" aria-describedby="uplFile" aria-label="Upload" @change="getImageBase64">
+                <button class="btn btn-outline-secondary btn-sm" type="button" id="uplFile" @click="uploadImg">Upload</button>
             </div>
             <div v-show="image.src" class="card mb-3" style="max-width: 540px;">
               <div class="row g-0">
@@ -70,6 +71,7 @@
                 </div>
                 <div class="col-sm-4">
                     <button class="btn btn-outline-primary btn-sm" @click="savePDF"><i class="bi bi-save-fill"></i> Save PDF</button>
+                    <!-- <p>{{ imageBase64 }}</p> -->
                 </div>
             </div>
         </div>
@@ -93,7 +95,8 @@ export default {
         generatedQRCode: '',
         busName: 'AdOn Group',
         reviewFor: 'Google',
-        opt: ''
+        opt: '',
+        imgFile: ''
       }
   },
   mounted () {
@@ -117,21 +120,34 @@ export default {
     this.image = img
   },
   methods: {
-    getImageBase64(event){
-        let file = event.target.files[0];
+    uploadImg(){
+      const upimg = document.getElementById('upImg');
+      this.getImageBase64(upimg, (imgb64) => {
+        this.imageBase64 = imgb64;
+      })
+      this.image.src = URL.createObjectURL(upimg.files[0]);
+    },
+    getImageBase64(element, callback){
+        let imgb64="";
+        // this.imageBase64 = imgb64;
+        let file = element.files[0];
         let reader = new FileReader();
         reader.onloadend = function() {
             // console.log('RESULT', reader.result)
-            this.imageBase64 = reader.result
-            console.log("Base64 "+this.imageBase64)
+            imgb64 = reader.result
+            // this.imageBase64 = imgb64;
+            callback(imgb64);
+            console.log("Base64 "+imgb64)
         }
         reader.readAsDataURL(file);
         this.imageName = file.name;
         let roundOffSize = Math.round((file.size*0.001)*100)/100;
         this.imageSize = roundOffSize;
-        this.image.src = URL.createObjectURL(event.target.files[0]);
+        // this.image.src = URL.createObjectURL(element.files[0]);
+        // console.log('test '+ this.imageBase64 )
     },
     generateQR(){
+      console.log("data b64"+this.imageBase64);
         const rLink = document.getElementById("review-link").value;
         let options = {
             text: rLink,
@@ -142,7 +158,7 @@ export default {
             correctLevel : QRCode.CorrectLevel.H,
             drawer: 'svg',
             dotScale: 1,
-            logo: this.image.src,
+            logo: this.imageBase64,
             logoWidth: this.image.width,
             logoHeight: this.image.height,
             logoBackgroundTransparent: false,
