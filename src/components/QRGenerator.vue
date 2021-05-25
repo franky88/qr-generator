@@ -24,7 +24,7 @@
                 <input type="file" class="form-control form-control-sm" id="upImg" name="image" accept="image/png, image/jpeg" aria-describedby="uplFile" aria-label="Upload" @change="getImageBase64">
                 <button class="btn btn-outline-primary btn-sm" type="button" id="uplFile" @click="uploadImg">Upload</button>
             </div>
-            <div v-show="image.src" class="card mb-3" style="max-width: 540px;">
+            <div v-show="imageBase64" class="card mb-3" style="max-width: 540px;">
               <div class="row g-0">
                 <div class="col-md-4">
                   <img class="align-self-center" id="output" :src="image.src" :alt="imageName">
@@ -32,8 +32,9 @@
                 <div class="col-md-8">
                   <div class="card-body">
                     <p class="card-title">{{imageName}}</p>
-                    <p class="card-text"><small class="text-muted">File size: {{imageSize}} KB</small></p>
-                    <a :href="image.src" target="_blank"><small class="text-muted">View Image</small></a>
+                    <p class="card-text" v-show="imageBase64"><small class="text-muted">File size: {{imageSize}} KB</small></p>
+                    <!-- <a :href="image.src" target="_blank"><small class="text-muted">View Image</small></a> -->
+                    <button v-show="imageBase64" class="btn btn-outline-danger btn-sm" @click="clearImage">Clear</button>
                   </div>
                 </div>
               </div>
@@ -96,7 +97,8 @@ export default {
         busName: 'AdOn Group',
         reviewFor: 'Google',
         opt: '',
-        imgFile: ''
+        imgFile: '',
+        // bgColor: ''
       }
   },
   mounted () {
@@ -118,6 +120,9 @@ export default {
     //image upload
     const img = document.getElementById('output');
     this.image = img
+    //bg color
+    // const bgcolor = document.getElementById('bgcolor');
+    // this.bgColor = bgcolor;
   },
   methods: {
     uploadImg(){
@@ -127,15 +132,18 @@ export default {
       })
       this.image.src = URL.createObjectURL(upimg.files[0]);
     },
+    clearImage(){
+      this.image.src = '';
+      this.imageBase64 = '';
+      this.imageName = '';
+      this.imageSize = '';
+    },
     getImageBase64(element, callback){
         let imgb64="";
-        // this.imageBase64 = imgb64;
         let file = element.files[0];
         let reader = new FileReader();
         reader.onloadend = function() {
-            // console.log('RESULT', reader.result)
             imgb64 = reader.result
-            // this.imageBase64 = imgb64;
             callback(imgb64);
             console.log("Base64 "+imgb64)
         }
@@ -143,11 +151,12 @@ export default {
         this.imageName = file.name;
         let roundOffSize = Math.round((file.size*0.001)*100)/100;
         this.imageSize = roundOffSize;
-        // this.image.src = URL.createObjectURL(element.files[0]);
-        // console.log('test '+ this.imageBase64 )
     },
+    // changeBackGroundColor(){
+    //   this.bgColor = 
+    // },
     generateQR(){
-      console.log("data b64"+this.imageBase64);
+      // console.log("data b64"+this.imageBase64);
         const rLink = document.getElementById("review-link").value;
         let options = {
             text: rLink,
@@ -192,7 +201,6 @@ export default {
     position: relative;
     cursor: pointer;
   }
-
   .input-file {
     opacity: 0; /* invisible but it's there! */
     width: 100%;
@@ -200,19 +208,17 @@ export default {
     position: absolute;
     cursor: pointer;
   }
-
   .dropbox:hover {
     background: lightblue; /* when mouse over to the drop zone, change color */
   }
-
   .dropbox p {
     font-size: 1.2em;
     text-align: center;
     padding: 50px 0;
   }
   #output{
-      width: 100%;
-      height: auto;
-      padding: 10px;
+    width: 100%;
+    height: auto;
+    padding: 10px;
   }
 </style>
