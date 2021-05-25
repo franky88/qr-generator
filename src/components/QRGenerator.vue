@@ -3,22 +3,22 @@
         <div class="col-sm-4">
           <div class="card card-body mb-2">
             <h4 class="card-title">AOR QR Generator</h4>
-            <div class="mb-3">
-                <label for="businessName" class="form-label">Business Name</label>
+            <div class="form-floating mb-2">
                 <input v-model="busName" type="text" class="form-control form-control-sm" id="businessName">
+                <label for="businessName" class="form-label">Business Name</label>
                 <!-- <input type="text" id="businessName"> -->
             </div>
-            <div class="mb-3">
-                <label for="reviewlink" class="form-label">Review link</label>
+            <div class="form-floating mb-2">
                 <input type="url" class="form-control form-control-sm" id="review-link" :placeholder="opt.text" v-model="rLink">
+                <label for="reviewlink" class="form-label">Review link</label>
             </div>
-            <div class="input-group input-group-sm mb-3">
-              <label class="input-group-text" for="inputGroupSelect01">Review type</label>
+            <div class="form-floating mb-2">
               <select v-model="reviewFor" class="form-select" id="reviewfor">
                 <option value="Google" selected>Google</option>
                 <option value="Google or Facebook">Google or Facebook</option>
                 <option value="Facebook">Facebook</option>
               </select>
+              <label for="floatingSelect">Review type</label>
             </div>
             <label for="logoimage" class="form-label">Company logo</label>
             <div class="mb-3 input-group">
@@ -102,8 +102,8 @@ export default {
         reviewFor: 'Google',
         opt: '',
         imgFile: '',
-        genLink: ''
-        // bgColor: ''
+        genLink: '',
+        bgColor: ''
       }
   },
   mounted () {
@@ -128,8 +128,8 @@ export default {
     const img = document.getElementById('output');
     this.image = img
     //bg color
-    // const bgcolor = document.getElementById('bgcolor');
-    // this.bgColor = bgcolor;
+    const bgcolor = document.getElementById('bgcolor');
+    this.bgColor = bgcolor;
   },
   methods: {
     uploadImg(){
