@@ -41,7 +41,7 @@
             </div>
             <button @click="generateQR" class="btn btn-outline-success btn-sm"><i class="bi bi-upc-scan"></i> Generate QR</button>
           </div>
-          <div class="card card-body">
+          <div class="card card-body" v-show="genLink">
             <strong>PDF Options</strong>
             <button class="btn btn-outline-primary btn-sm" @click="savePDF"><i class="bi bi-save-fill"></i> Save PDF</button> 
           </div>
@@ -69,7 +69,6 @@
                                 <div style="text-align: center;">
                                     <img src="../assets/AORlogo.png" alt="" style="width: 250px;">
                                 </div>
-                                <br>
                                 <br>
                                 <div style="text-align: center;">
                                   <a :href="genLink">{{ genLink }}</a>
@@ -190,7 +189,7 @@ export default {
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             enableLinks: true,
-            jsPDF: { unit: 'in', format: [8.5, 7], orientation: 'portrait' }
+            jsPDF: { unit: 'in', format: "letter", orientation: 'portrait' }
         };
         html2pdf().set(opt).from(element).save();
     }
