@@ -1,15 +1,16 @@
 <template>
     <div class="row">
         <div class="col-sm-4">
-          <div class="card card-body">
+          <div class="card card-body mb-2">
             <h4 class="card-title">AOR QR Generator</h4>
             <div class="mb-3">
                 <label for="businessName" class="form-label">Business Name</label>
                 <input v-model="busName" type="text" class="form-control form-control-sm" id="businessName">
+                <!-- <input type="text" id="businessName"> -->
             </div>
             <div class="mb-3">
                 <label for="reviewlink" class="form-label">Review link</label>
-                <input type="url" class="form-control form-control-sm" id="review-link" :placeholder="opt.text">
+                <input type="url" class="form-control form-control-sm" id="review-link" :placeholder="opt.text" v-model="rLink">
             </div>
             <div class="input-group input-group-sm mb-3">
               <label class="input-group-text" for="inputGroupSelect01">Review type</label>
@@ -31,20 +32,23 @@
                 </div>
                 <div class="col-md-8">
                   <div class="card-body">
-                    <p class="card-title">{{imageName}}</p>
-                    <p class="card-text" v-show="imageBase64"><small class="text-muted">File size: {{imageSize}} KB</small></p>
+                    <p class="card-title">{{imageName}} | <small class="text-muted" v-show="imageBase64">File size: {{imageSize}} KB</small></p>
                     <!-- <a :href="image.src" target="_blank"><small class="text-muted">View Image</small></a> -->
                     <button v-show="imageBase64" class="btn btn-outline-danger btn-sm" @click="clearImage">Clear</button>
                   </div>
                 </div>
               </div>
             </div>
-            <button @click="generateQR" class="btn btn-outline-success"><i class="bi bi-upc-scan"></i> Generate QR</button>
+            <button @click="generateQR" class="btn btn-outline-success btn-sm"><i class="bi bi-upc-scan"></i> Generate QR</button>
+          </div>
+          <div class="card card-body">
+            <strong>PDF Options</strong>
+            <button class="btn btn-outline-primary btn-sm" @click="savePDF"><i class="bi bi-save-fill"></i> Save PDF</button> 
           </div>
         </div>
         <div class="col-sm-8">
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-12">
                     <div class="card" style="text-align: center;">
                         <div class="card-body">
                             <div id="toPDFFile">
@@ -66,13 +70,13 @@
                                     <img src="../assets/AORlogo.png" alt="" style="width: 250px;">
                                 </div>
                                 <br>
+                                <br>
+                                <div style="text-align: center;">
+                                  <a :href="genLink">{{ genLink }}</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-4">
-                    <button class="btn btn-outline-primary btn-sm" @click="savePDF"><i class="bi bi-save-fill"></i> Save PDF</button>
-                    <!-- <p>{{ imageBase64 }}</p> -->
                 </div>
             </div>
         </div>
@@ -92,16 +96,20 @@ export default {
         imageName: '',
         imageSize: '',
         image: '',
+        rLink: '',
         imageBase64: '',
         generatedQRCode: '',
         busName: 'AdOn Group',
         reviewFor: 'Google',
         opt: '',
         imgFile: '',
+        genLink: ''
         // bgColor: ''
       }
   },
   mounted () {
+    const rLink = document.getElementById("review-link").value;
+    this.rLink = rLink
     const revFor = document.getElementById('reviewfor').value;
     this.reviewFor = revFor;
     //Business name
@@ -156,10 +164,9 @@ export default {
     //   this.bgColor = 
     // },
     generateQR(){
-      // console.log("data b64"+this.imageBase64);
-        const rLink = document.getElementById("review-link").value;
+        this.genLink = this.rLink
         let options = {
-            text: rLink,
+            text: this.rLink,
             width: this.qrWidth,
             height: this.qrHeight,
             colorDark : "#000000",
@@ -183,7 +190,7 @@ export default {
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             enableLinks: true,
-            jsPDF: { unit: 'in', format: [8.5, 8], orientation: 'portrait' }
+            jsPDF: { unit: 'in', format: [8.5, 7], orientation: 'portrait' }
         };
         html2pdf().set(opt).from(element).save();
     }
@@ -221,4 +228,18 @@ export default {
     height: auto;
     padding: 10px;
   }
+  /* #businessName {
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: .5px solid rgba(200,200,100, .5);
+    width: 100%;
+  }
+    #businessName:focus {
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: .5px solid rgba(200,200,100, .5);
+    width: 100%;
+  } */
 </style>

@@ -26,4 +26,7 @@ export default {
   color: #2c3e50;
   margin-top: 20px;
 }
+body {
+  background-color: rgb(0, 9, 24);
+}
 </style>
