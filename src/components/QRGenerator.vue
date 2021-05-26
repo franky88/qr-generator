@@ -2,12 +2,30 @@
     <div class="row">
         <div class="col-sm-4">
           <div class="card card-body mb-2">
+            <div v-if="successMsg" class="alert alert-success d-flex align-items-center" role="alert">
+              <!-- <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg> -->
+              <div>
+                <i class="bi bi-check-circle-fill"></i> {{ successMsg }}
+              </div>
+            </div>
+            <div v-if="inputErr" class="alert alert-danger d-flex align-items-center" role="alert">
+              <!-- <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg> -->
+              <div>
+                <i class="bi bi-exclamation-triangle-fill"></i> <strong>Oh snap!</strong> {{ inputErr }}
+              </div>
+            </div>
             <h4 class="card-title">AOR QR Generator</h4>
+            <!-- <p v-show="busNameErr" style="color:red;"><small><i class="bi bi-arrow-down"></i> {{busNameErr}} *</small></p> -->
             <div class="form-floating mb-2">
-                <input v-model="busName" type="text" class="form-control form-control-sm" id="businessName">
+                <input v-model="busName" type="text" class="form-control form-control-sm" id="businessName" placeholder="AdOn Group">
                 <label for="businessName" class="form-label">Business Name</label>
                 <!-- <input type="text" id="businessName"> -->
             </div>
+            <!-- <div v-show="rLinkErr" class="alert alert-warning alert-dismissible fade show" role="alert">
+              <strong>Oh snap!</strong> {{ rLinkErr }}.
+              <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div> -->
+            <!-- <p v-show="busNameErr" style="color:red;"><small><i class="bi bi-arrow-down"></i> {{busNameErr}} *</small></p> -->
             <div class="form-floating mb-2">
                 <input type="url" class="form-control form-control-sm" id="review-link" :placeholder="opt.text" v-model="rLink">
                 <label for="reviewlink" class="form-label">Review link</label>
@@ -42,7 +60,13 @@
             <button @click="generateQR" class="btn btn-outline-success btn-sm"><i class="bi bi-upc-scan"></i> Generate QR</button>
           </div>
           <div class="card card-body" v-show="genLink">
-            <strong>PDF Options</strong>
+            <strong>QR code Options</strong>
+            <hr>
+            <!-- <div>
+              <label for="exampleColorInput" class="form-label">Background Color</label>
+              <input type="color" class="form-control form-control-color" id="bgColor" :value="bgColor" title="Choose your color">
+              <p>{{ bgColor }}</p>
+            </div> -->
             <button class="btn btn-outline-primary btn-sm" @click="savePDF"><i class="bi bi-save-fill"></i> Save PDF</button> 
           </div>
         </div>
@@ -52,7 +76,8 @@
                     <div class="card" style="text-align: center;">
                         <div class="card-body">
                             <div id="toPDFFile">
-                                <h1 class="card-title" style="text-align: center;">{{ busName }}</h1>
+                                <h1 class="card-title" style="text-align: center;" v-if="busName==''">AdOn Group</h1>
+                                <h1 class="card-title" style="text-align: center;" v-else-if="busName">{{ busName }}</h1>
                                 <h4 style="text-align: center;">values your feedback.</h4>
                                 <br>
                                 <div id="qrcode" style="text-align: center;">
@@ -98,12 +123,14 @@ export default {
         rLink: '',
         imageBase64: '',
         generatedQRCode: '',
-        busName: 'AdOn Group',
+        busName: '',
+        inputErr: '',
         reviewFor: 'Google',
         opt: '',
         imgFile: '',
         genLink: '',
-        bgColor: ''
+        rLinkErr: '',
+        successMsg: ''
       }
   },
   mounted () {
@@ -128,8 +155,8 @@ export default {
     const img = document.getElementById('output');
     this.image = img
     //bg color
-    const bgcolor = document.getElementById('bgcolor');
-    this.bgColor = bgcolor;
+    // const bgcolor = document.getElementById('bgColor').value;
+    // this.bgColor = bgcolor;
   },
   methods: {
     uploadImg(){
@@ -159,10 +186,12 @@ export default {
         let roundOffSize = Math.round((file.size*0.001)*100)/100;
         this.imageSize = roundOffSize;
     },
-    // changeBackGroundColor(){
-    //   this.bgColor = 
-    // },
     generateQR(){
+      if(this.busName==='' || this.rLink===''){
+        this.inputErr = "You missed something!"
+      } else {
+        this.successMsg = "QR code generated!";
+        this.inputErr = "";
         this.genLink = this.rLink
         let options = {
             text: this.rLink,
@@ -180,6 +209,7 @@ export default {
             logoBackgroundColor: "#ffffff",
         }
         new QRCode(this.generatedQRCode, options)
+      }
     },
     savePDF(){
         var element = document.getElementById('toPDFFile');
@@ -189,7 +219,7 @@ export default {
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             enableLinks: true,
-            jsPDF: { unit: 'in', format: "letter", orientation: 'portrait' }
+            jsPDF: { unit: 'px', format: [400, 900], orientation: 'portrait' }
         };
         html2pdf().set(opt).from(element).save();
     }
@@ -223,7 +253,7 @@ export default {
     padding: 50px 0;
   }
   #output{
-    width: 100%;
+    width: 100px;
     height: auto;
     padding: 10px;
   }
