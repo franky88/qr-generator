@@ -123,13 +123,21 @@
             </div>
             <div v-if="qrOptions">
               <hr>
-              <label for="exampleColorInput" class="form-label">Logo background color</label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" @change="logoBGTransparent = !logoBGTransparent">
+                <label class="form-check-label" for="logo-transparency">Transparent logo</label>
+              </div>
+              <hr>
+              <label for="bgColor" class="form-label">Logo background color</label>
               <input type="color" class="form-control form-control-color" id="bgColor" title="Choose your color">
+              <hr>
+              <label for="logo-size" class="form-label">Logo scale</label>
+              <input type="range" class="form-range" min="0.25" max="0.50" step="0.05" id="logo-size">
               <hr>
               <button class="btn btn-primary btn-sm mb-2" @click="updateQR">Update QR</button>
             </div>
           </div>
-          <div class="card card-body" v-show="genLink">
+          <div class="card card-body mb-2" v-show="genLink">
             <strong>Save PDF</strong>
             <hr>
             <button class="btn btn-outline-primary btn-sm" @click="savePDF">
@@ -210,7 +218,8 @@ export default {
       rLinkErr: "",
       successMsg: "",
       // logoBGColor: ""
-      qrOptions: false
+      qrOptions: false,
+      logoBGTransparent: false,
     };
   },
   mounted() {
@@ -238,6 +247,8 @@ export default {
     // const bgcolor = document.getElementById('bgColor').value;
     // this.logoBGColor = bgcolor;
     //qr options
+    const size = document.querySelector("#logo-size").value;
+    console.log(size);
   },
   methods: {
     uploadImg() {
@@ -284,8 +295,8 @@ export default {
           drawer: "svg",
           dotScale: 1,
           logo: this.imageBase64,
-          logoWidth: this.image.width,
-          logoHeight: this.image.height,
+          logoWidth: 100,
+          logoHeight: 100,
           logoBackgroundTransparent: false,
           logoBackgroundColor: "#ffffff",
         };
@@ -293,8 +304,10 @@ export default {
       }
     },
     updateQR(){
+      const logoWidth = this.qrWidth*0.25;
+      const logoHeight = this.qrHeight*0.25;
       const logobgcolor = document.getElementById("bgColor").value;
-      console.log(this.logoBGColor)
+      // console.log(this.logoBGColor)
       if (this.busName === "" || this.rLink === "") {
         this.inputErr = "You missed something!";
       } else {
@@ -311,9 +324,9 @@ export default {
           drawer: "svg",
           dotScale: 1,
           logo: this.imageBase64,
-          logoWidth: this.image.width,
-          logoHeight: this.image.height,
-          logoBackgroundTransparent: false,
+          logoWidth: logoWidth,
+          logoHeight: logoHeight,
+          logoBackgroundTransparent: this.logoBGTransparent,
           logoBackgroundColor: logobgcolor,
         };
         new QRCode(this.generatedQRCode, options);
