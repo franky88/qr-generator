@@ -128,12 +128,14 @@
                 <label class="form-check-label" for="logo-transparency">Transparent logo</label>
               </div>
               <hr>
-              <label for="bgColor" class="form-label">Logo background color</label>
-              <input type="color" class="form-control form-control-color" id="bgColor" title="Choose your color">
-              <hr>
+              <div v-show="!logoBGTransparent">
+                <label for="bgColor" class="form-label">Logo background color</label>
+                <input type="color" class="form-control form-control-color" :value="logoBGColor" id="bgColor" title="Choose your color">
+                <hr>
+              </div>
               <label for="logo-size" class="form-label">Logo scale</label>
-              <input type="range" class="form-range" :min="imgScaleMinValue" :max="imgScaleMaxValue" :step="scaleSteps" id="logo-size" @change="imageScaleSize">
-              <!-- <a tabindex="0" class="btn btn-lg btn-danger" role="button" data-bs-toggle="popover" data-bs-trigger="focus" title="Dismissible popover" data-bs-content="And here's some amazing content. It's very engaging. Right?">Dismissible popover</a> -->
+              <input v-model="imgScaleValue" type="range" class="form-range" :min="imgScaleMinValue" :max="imgScaleMaxValue" :step="scaleSteps" id="logo-size" @change="imageScaleSize">
+              <span class="badge bg-info text-dark">{{ imgScaleValue }}</span>
               <hr>
               <button class="btn btn-primary btn-sm mb-2" @click="updateQR">Update QR</button>
             </div>
@@ -218,13 +220,13 @@ export default {
       genLink: "",
       rLinkErr: "",
       successMsg: "",
-      // logoBGColor: ""
+      logoBGColor: "#ffffff",
       qrOptions: false,
       logoBGTransparent: false,
       scaleSteps: 0.01,
       imgScaleMinValue: 0.25,
       imgScaleMaxValue: 0.35,
-      imgScaleValue: 0.25
+      imgScaleValue: 0.25,
     };
   },
   mounted() {
@@ -249,8 +251,7 @@ export default {
     const img = document.getElementById("output");
     this.image = img;
     //bg color
-    // const bgcolor = document.getElementById('bgColor').value;
-    // this.logoBGColor = bgcolor;
+    
     //qr options
     // const size = document.querySelector("#logo-size").value;
     // console.log(size);
@@ -284,8 +285,8 @@ export default {
       this.imageSize = roundOffSize;
     },
     generateQR() {
-      const logoWidth = this.qrWidth*this.imgScaleMinValue;
-      const logoHeight = this.qrHeight*this.imgScaleMinValue;
+      const logoWidth = this.qrWidth*this.imgScaleValue;
+      const logoHeight = this.qrHeight*this.imgScaleValue;
       if (this.busName === "" || this.rLink === "") {
         this.inputErr = "You missed something!";
       } else {
@@ -305,7 +306,7 @@ export default {
           logoWidth: logoWidth,
           logoHeight: logoHeight,
           logoBackgroundTransparent: false,
-          logoBackgroundColor: "#ffffff",
+          logoBackgroundColor: this.logoBGColor,
         };
         new QRCode(this.generatedQRCode, options);
       }
@@ -319,8 +320,8 @@ export default {
     updateQR(){
       const logoWidth = this.qrWidth*this.imgScaleValue;
       const logoHeight = this.qrHeight*this.imgScaleValue;
-      const logobgcolor = document.getElementById("bgColor").value;
-      // console.log(this.logoBGColor)
+      const bgcolor = document.querySelector('#bgColor');
+      this.logoBGColor = bgcolor.value;
       if (this.busName === "" || this.rLink === "") {
         this.inputErr = "You missed something!";
       } else {
@@ -340,7 +341,7 @@ export default {
           logoWidth: logoWidth,
           logoHeight: logoHeight,
           logoBackgroundTransparent: this.logoBGTransparent,
-          logoBackgroundColor: logobgcolor,
+          logoBackgroundColor: this.logoBGColor,
         };
         new QRCode(this.generatedQRCode, options);
       }
@@ -390,7 +391,7 @@ export default {
   padding: 50px 0;
 }
 #output {
-  width: 120px;
+  width: 100%;
   height: auto;
   padding: 10px;
 }
