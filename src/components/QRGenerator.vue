@@ -116,7 +116,7 @@
     <div class="col-sm-8">
       <div class="row">
         <div class="col-sm-4">
-          <div class="card card-body mb-2" v-show="genLink">
+          <div class="card card-body mb-2" v-if="genLink != ''">
             <div class="form-check form-switch">
               <input class="form-check-input" type="checkbox" @change="qrOptions = !qrOptions">
               <label class="form-check-label" for="show-qr-options">Show QR Options</label>
@@ -132,7 +132,8 @@
               <input type="color" class="form-control form-control-color" id="bgColor" title="Choose your color">
               <hr>
               <label for="logo-size" class="form-label">Logo scale</label>
-              <input type="range" class="form-range" min="0.25" max="0.50" step="0.05" id="logo-size">
+              <input type="range" class="form-range" :min="imgScaleMinValue" :max="imgScaleMaxValue" :step="scaleSteps" id="logo-size" @change="imageScaleSize">
+              <!-- <a tabindex="0" class="btn btn-lg btn-danger" role="button" data-bs-toggle="popover" data-bs-trigger="focus" title="Dismissible popover" data-bs-content="And here's some amazing content. It's very engaging. Right?">Dismissible popover</a> -->
               <hr>
               <button class="btn btn-primary btn-sm mb-2" @click="updateQR">Update QR</button>
             </div>
@@ -220,6 +221,10 @@ export default {
       // logoBGColor: ""
       qrOptions: false,
       logoBGTransparent: false,
+      scaleSteps: 0.01,
+      imgScaleMinValue: 0.25,
+      imgScaleMaxValue: 0.35,
+      imgScaleValue: 0.25
     };
   },
   mounted() {
@@ -247,8 +252,8 @@ export default {
     // const bgcolor = document.getElementById('bgColor').value;
     // this.logoBGColor = bgcolor;
     //qr options
-    const size = document.querySelector("#logo-size").value;
-    console.log(size);
+    // const size = document.querySelector("#logo-size").value;
+    // console.log(size);
   },
   methods: {
     uploadImg() {
@@ -271,7 +276,7 @@ export default {
       reader.onloadend = function() {
         imgb64 = reader.result;
         callback(imgb64);
-        console.log("Base64 " + imgb64);
+        // console.log("Base64 " + imgb64);
       };
       reader.readAsDataURL(file);
       this.imageName = file.name;
@@ -279,6 +284,8 @@ export default {
       this.imageSize = roundOffSize;
     },
     generateQR() {
+      const logoWidth = this.qrWidth*this.imgScaleMinValue;
+      const logoHeight = this.qrHeight*this.imgScaleMinValue;
       if (this.busName === "" || this.rLink === "") {
         this.inputErr = "You missed something!";
       } else {
@@ -295,17 +302,23 @@ export default {
           drawer: "svg",
           dotScale: 1,
           logo: this.imageBase64,
-          logoWidth: 100,
-          logoHeight: 100,
+          logoWidth: logoWidth,
+          logoHeight: logoHeight,
           logoBackgroundTransparent: false,
           logoBackgroundColor: "#ffffff",
         };
         new QRCode(this.generatedQRCode, options);
       }
     },
+    imageScaleSize(element){
+      const imgScale = element.target.value;
+      // const imgScale = document.getElementById("logo-size").value;
+      console.log(imgScale);
+      this.imgScaleValue = imgScale;
+    },
     updateQR(){
-      const logoWidth = this.qrWidth*0.25;
-      const logoHeight = this.qrHeight*0.25;
+      const logoWidth = this.qrWidth*this.imgScaleValue;
+      const logoHeight = this.qrHeight*this.imgScaleValue;
       const logobgcolor = document.getElementById("bgColor").value;
       // console.log(this.logoBGColor)
       if (this.busName === "" || this.rLink === "") {
@@ -377,7 +390,7 @@ export default {
   padding: 50px 0;
 }
 #output {
-  width: 140px;
+  width: 120px;
   height: auto;
   padding: 10px;
 }
