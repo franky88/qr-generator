@@ -115,11 +115,13 @@
       <div class="card card-body" v-show="genLink">
         <strong>QR code Options</strong>
         <hr />
-        <!-- <div>
-              <label for="exampleColorInput" class="form-label">Background Color</label>
-              <input type="color" class="form-control form-control-color" id="bgColor" :value="bgColor" title="Choose your color">
-              <p>{{ bgColor }}</p>
-            </div> -->
+        <div>
+          <label for="exampleColorInput" class="form-label">Logo background color</label>
+          <input type="color" class="form-control form-control-color" id="bgColor" title="Choose your color">
+        </div>
+        <hr>
+        <button class="btn btn-primary btn-sm mb-2" @click="updateQR">Update QR</button>
+        <hr>
         <button class="btn btn-outline-primary btn-sm" @click="savePDF">
           <i class="bi bi-save-fill"></i> Save PDF
         </button>
@@ -203,6 +205,7 @@ export default {
       genLink: "",
       rLinkErr: "",
       successMsg: "",
+      logoBGColor: ""
     };
   },
   mounted() {
@@ -227,8 +230,9 @@ export default {
     const img = document.getElementById("output");
     this.image = img;
     //bg color
-    // const bgcolor = document.getElementById('bgColor').value;
-    // this.bgColor = bgcolor;
+    const bgcolor = document.getElementById('bgColor').value;
+    // console.log(bgcolor);
+    this.logoBGColor = bgcolor;
   },
   methods: {
     uploadImg() {
@@ -279,6 +283,33 @@ export default {
           logoHeight: this.image.height,
           logoBackgroundTransparent: false,
           logoBackgroundColor: "#ffffff",
+        };
+        new QRCode(this.generatedQRCode, options);
+      }
+    },
+    updateQR(){
+      const logobgcolor = document.getElementById("bgColor").value;
+      console.log(this.logoBGColor)
+      if (this.busName === "" || this.rLink === "") {
+        this.inputErr = "You missed something!";
+      } else {
+        this.successMsg = "QR code generated!";
+        this.inputErr = "";
+        this.genLink = this.rLink;
+        let options = {
+          text: this.rLink,
+          width: this.qrWidth,
+          height: this.qrHeight,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H,
+          drawer: "svg",
+          dotScale: 1,
+          logo: this.imageBase64,
+          logoWidth: this.image.width,
+          logoHeight: this.image.height,
+          logoBackgroundTransparent: false,
+          logoBackgroundColor: logobgcolor,
         };
         new QRCode(this.generatedQRCode, options);
       }
