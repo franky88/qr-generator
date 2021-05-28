@@ -18,7 +18,7 @@
           <!-- <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg> -->
           <div>
             <i class="bi bi-exclamation-triangle-fill"></i>
-            <strong>Oh snap!</strong> {{ inputErr }}
+            <strong>Oh!</strong> {{ inputErr }}
           </div>
         </div>
         <h4 class="card-title">AOR QR Generator</h4>
@@ -112,27 +112,35 @@
           <i class="bi bi-upc-scan"></i> Generate QR
         </button>
       </div>
-      <div class="card card-body" v-show="genLink">
-        <strong>QR code Options</strong>
-        <hr />
-        <div>
-          <label for="exampleColorInput" class="form-label">Logo background color</label>
-          <input type="color" class="form-control form-control-color" id="bgColor" title="Choose your color">
-        </div>
-        <hr>
-        <button class="btn btn-primary btn-sm mb-2" @click="updateQR">Update QR</button>
-        <hr>
-        <button class="btn btn-outline-primary btn-sm" @click="savePDF">
-          <i class="bi bi-save-fill"></i> Save PDF
-        </button>
-      </div>
     </div>
     <div class="col-sm-8">
       <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-4">
+          <div class="card card-body mb-2" v-show="genLink">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" @change="qrOptions = !qrOptions">
+              <label class="form-check-label" for="show-qr-options">Show QR Options</label>
+            </div>
+            <div v-if="qrOptions">
+              <hr>
+              <label for="exampleColorInput" class="form-label">Logo background color</label>
+              <input type="color" class="form-control form-control-color" id="bgColor" title="Choose your color">
+              <hr>
+              <button class="btn btn-primary btn-sm mb-2" @click="updateQR">Update QR</button>
+            </div>
+          </div>
+          <div class="card card-body" v-show="genLink">
+            <strong>Save PDF</strong>
+            <hr>
+            <button class="btn btn-outline-primary btn-sm" @click="savePDF">
+              <i class="bi bi-save-fill"></i> Save PDF
+            </button>
+          </div>
+        </div>
+        <div class="col-sm-8">
           <div class="card" style="text-align: center;">
-            <div class="card-body">
-              <div id="toPDFFile">
+            <div class="card-body mb-3">
+              <div id="toPDFFile" class="mt-4">
                 <h1
                   class="card-title"
                   style="text-align: center;"
@@ -168,10 +176,6 @@
                     style="width: 250px;"
                   />
                 </div>
-                <br />
-                <div style="text-align: center;">
-                  <a :href="genLink">{{ genLink }}</a>
-                </div>
               </div>
             </div>
           </div>
@@ -205,7 +209,8 @@ export default {
       genLink: "",
       rLinkErr: "",
       successMsg: "",
-      logoBGColor: ""
+      // logoBGColor: ""
+      qrOptions: false
     };
   },
   mounted() {
@@ -230,9 +235,9 @@ export default {
     const img = document.getElementById("output");
     this.image = img;
     //bg color
-    const bgcolor = document.getElementById('bgColor').value;
-    // console.log(bgcolor);
-    this.logoBGColor = bgcolor;
+    // const bgcolor = document.getElementById('bgColor').value;
+    // this.logoBGColor = bgcolor;
+    //qr options
   },
   methods: {
     uploadImg() {
@@ -322,7 +327,7 @@ export default {
         image: { type: "jpeg", quality: 0.98 },
         html2canvas: { scale: 2 },
         enableLinks: true,
-        jsPDF: { unit: "px", format: [400, 900], orientation: "portrait" },
+        jsPDF: { unit: "pt", format: [400, 600], orientation: "p" },
       };
       html2pdf()
         .set(opt)
