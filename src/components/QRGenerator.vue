@@ -328,7 +328,7 @@ export default {
   padding: 50px 0;
 }
 #output {
-  width: 150px;
+  width: 140px;
   height: auto;
   padding: 10px;
 }
