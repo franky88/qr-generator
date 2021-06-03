@@ -405,7 +405,7 @@ export default {
 h1 {
   font-family: "Montserrat", sans-serif;
   font-weight: 800;
-  font-size: 45px;
+  font-size: 40px;
   color: #000000
 }
 h4, h5 {
