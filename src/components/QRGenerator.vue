@@ -164,7 +164,7 @@
                   style="text-align: center;"
                   v-if="busName == ''"
                 >
-                  AdOn Group
+                  Ad On Group
                 </h1>
                 <h1
                   class="card-title"
