@@ -143,9 +143,16 @@
           <div class="card card-body mb-2" v-show="genLink">
             <strong>Save PDF</strong>
             <hr>
+            <strong>Note: </strong>
+            <small>Please check the PDF before sending.</small>
+            <br>
+            <small>This app is not supporting mobile. Update will be available soon.</small>
+            <hr>
             <button class="btn btn-outline-primary btn-sm" @click="savePDF">
               <i class="bi bi-save-fill"></i> Save PDF
             </button>
+            
+            
           </div>
         </div>
         <div class="col-sm-8">
