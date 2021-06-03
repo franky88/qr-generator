@@ -330,7 +330,7 @@ export default {
       const bgcolor = document.querySelector('#bgColor');
       this.logoBGColor = bgcolor.value;
       if (this.busName === "" || this.rLink === "") {
-        this.inputErr = "You missed something!";
+        this.inputErr = "You missed something! Please check Business name or Review link";
       } else {
         this.successMsg = "QR code generated!";
         this.inputErr = "";
