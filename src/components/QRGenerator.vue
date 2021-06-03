@@ -21,7 +21,7 @@
             <strong> Oh!</strong> {{ inputErr }}
           </div>
         </div>
-        <h4 class="card-title">AOR QR Generator</h4>
+        <strong class="card-title">AOR QR Generator Form</strong>
         <!-- <p v-show="busNameErr" style="color:red;"><small><i class="bi bi-arrow-down"></i> {{busNameErr}} *</small></p> -->
         <div class="form-floating mb-2">
           <input
@@ -400,5 +400,10 @@ h1 {
   font-weight: 800;
   font-size: 45px;
   color: #000000
+}
+h4, h5 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  color: #000000;
 }
 </style>
