@@ -18,7 +18,7 @@
           <!-- <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg> -->
           <div>
             <i class="bi bi-exclamation-triangle-fill"></i>
-            <strong>Oh!</strong> {{ inputErr }}
+            <strong> Oh!</strong> {{ inputErr }}
           </div>
         </div>
         <h4 class="card-title">AOR QR Generator</h4>
@@ -395,18 +395,10 @@ export default {
   height: auto;
   padding: 10px;
 }
-/* #businessName {
-    border-top: none;
-    border-right: none;
-    border-left: none;
-    border-bottom: .5px solid rgba(200,200,100, .5);
-    width: 100%;
-  }
-    #businessName:focus {
-    border-top: none;
-    border-right: none;
-    border-left: none;
-    border-bottom: .5px solid rgba(200,200,100, .5);
-    width: 100%;
-  } */
+h1 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  font-size: 45px;
+  color: #000000
+}
 </style>
