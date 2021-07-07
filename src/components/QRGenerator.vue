@@ -78,7 +78,7 @@
             Upload
           </button>
         </div>
-        <div v-show="imageBase64" class="card mb-3" style="max-width: 540px;">
+        <div v-show="imageBase64" class="card mb-3" style="max-width: 540px">
           <div class="row g-0">
             <div class="col-md-4">
               <img
@@ -118,80 +118,112 @@
         <div class="col-sm-4">
           <div class="card card-body mb-2" v-if="genLink != ''">
             <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" @change="qrOptions = !qrOptions">
-              <label class="form-check-label" for="show-qr-options">Show QR Options</label>
+              <input
+                class="form-check-input"
+                type="checkbox"
+                @change="qrOptions = !qrOptions"
+              />
+              <label class="form-check-label" for="show-qr-options"
+                >Show QR Options</label
+              >
             </div>
             <div v-if="qrOptions">
-              <hr>
+              <hr />
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" @change="logoBGTransparent = !logoBGTransparent">
-                <label class="form-check-label" for="logo-transparency">Transparent logo</label>
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  @change="logoBGTransparent = !logoBGTransparent"
+                />
+                <label class="form-check-label" for="logo-transparency"
+                  >Transparent logo</label
+                >
               </div>
-              <hr>
+              <hr />
               <div v-show="!logoBGTransparent">
-                <label for="bgColor" class="form-label">Logo background color</label>
-                <input type="color" class="form-control form-control-color" :value="logoBGColor" id="bgColor" title="Choose your color">
-                <hr>
+                <label for="bgColor" class="form-label"
+                  >Logo background color</label
+                >
+                <input
+                  type="color"
+                  class="form-control form-control-color"
+                  :value="logoBGColor"
+                  id="bgColor"
+                  title="Choose your color"
+                />
+                <hr />
               </div>
               <label for="logo-size" class="form-label">Logo scale</label>
-              <input v-model="imgScaleValue" type="range" class="form-range" :min="imgScaleMinValue" :max="imgScaleMaxValue" :step="scaleSteps" id="logo-size" @change="imageScaleSize">
+              <input
+                v-model="imgScaleValue"
+                type="range"
+                class="form-range"
+                :min="imgScaleMinValue"
+                :max="imgScaleMaxValue"
+                :step="scaleSteps"
+                id="logo-size"
+                @change="imageScaleSize"
+              />
               <span class="badge bg-info text-dark">{{ imgScaleValue }}</span>
-              <hr>
-              <button class="btn btn-primary btn-sm mb-2" @click="updateQR">Update QR</button>
+              <hr />
+              <button class="btn btn-primary btn-sm mb-2" @click="updateQR">
+                Update QR
+              </button>
             </div>
           </div>
           <div class="card card-body mb-2" v-show="genLink">
             <strong>Save PDF</strong>
-            <hr>
+            <hr />
             <strong>Note: </strong>
             <small>Please check the PDF before sending.</small>
-            <br>
-            <small>This app is not supporting mobile. Update will be available soon.</small>
-            <hr>
+            <br />
+            <small
+              >This app is not supporting mobile. Update will be available
+              soon.</small
+            >
+            <hr />
             <button class="btn btn-outline-primary btn-sm" @click="savePDF">
               <i class="bi bi-save-fill"></i> Save PDF
             </button>
-            
-            
           </div>
         </div>
         <div class="col-sm-8">
-          <div class="card" style="text-align: center;">
+          <div class="card" style="text-align: center; padding: 20px">
             <div class="card-body mb-3">
               <div id="toPDFFile" class="mt-4">
                 <h1
                   class="card-title"
-                  style="text-align: center;"
+                  style="text-align: center"
                   v-if="busName == ''"
                 >
                   Ad On Group
                 </h1>
                 <h1
                   class="card-title"
-                  style="text-align: center;"
+                  style="text-align: center"
                   v-else-if="busName"
                 >
                   {{ busName }}
                 </h1>
-                <h4 style="text-align: center;">values your feedback.</h4>
+                <h4 style="text-align: center">values your feedback.</h4>
                 <br />
-                <div id="qrcode" style="text-align: center;">
+                <div id="qrcode" style="text-align: center">
                   <!-- <img :src="image.src" alt="" style="width:100px; z-index:20; position: float;"> -->
                 </div>
                 <br />
                 <br />
-                <h5 style="text-align: center;">
+                <h5 style="text-align: center">
                   Please scan above to leave us a
                   <br />
                   review on {{ reviewFor }}!
                 </h5>
                 <br />
-                <h4 style="text-align: center;">powered by</h4>
-                <div style="text-align: center;">
+                <h4 style="text-align: center">powered by</h4>
+                <div style="text-align: center">
                   <img
                     src="../assets/AORlogo.png"
                     alt=""
-                    style="width: 250px;"
+                    style="width: 250px"
                   />
                 </div>
               </div>
@@ -258,7 +290,7 @@ export default {
     const img = document.getElementById("output");
     this.image = img;
     //bg color
-    
+
     //qr options
     // const size = document.querySelector("#logo-size").value;
     // console.log(size);
@@ -281,7 +313,7 @@ export default {
       let imgb64 = "";
       let file = element.files[0];
       let reader = new FileReader();
-      reader.onloadend = function() {
+      reader.onloadend = function () {
         imgb64 = reader.result;
         callback(imgb64);
         // console.log("Base64 " + imgb64);
@@ -292,8 +324,8 @@ export default {
       this.imageSize = roundOffSize;
     },
     generateQR() {
-      const logoWidth = this.qrWidth*this.imgScaleValue;
-      const logoHeight = this.qrHeight*this.imgScaleValue;
+      const logoWidth = this.qrWidth * this.imgScaleValue;
+      const logoHeight = this.qrHeight * this.imgScaleValue;
       if (this.busName === "" || this.rLink === "") {
         this.inputErr = "You missed something!";
       } else {
@@ -318,19 +350,20 @@ export default {
         new QRCode(this.generatedQRCode, options);
       }
     },
-    imageScaleSize(element){
+    imageScaleSize(element) {
       const imgScale = element.target.value;
       // const imgScale = document.getElementById("logo-size").value;
       console.log(imgScale);
       this.imgScaleValue = imgScale;
     },
-    updateQR(){
-      const logoWidth = this.qrWidth*this.imgScaleValue;
-      const logoHeight = this.qrHeight*this.imgScaleValue;
-      const bgcolor = document.querySelector('#bgColor');
+    updateQR() {
+      const logoWidth = this.qrWidth * this.imgScaleValue;
+      const logoHeight = this.qrHeight * this.imgScaleValue;
+      const bgcolor = document.querySelector("#bgColor");
       this.logoBGColor = bgcolor.value;
       if (this.busName === "" || this.rLink === "") {
-        this.inputErr = "You missed something! Please check Business name or Review link";
+        this.inputErr =
+          "You missed something! Please check Business name or Review link";
       } else {
         this.successMsg = "QR code generated!";
         this.inputErr = "";
@@ -356,17 +389,14 @@ export default {
     savePDF() {
       var element = document.getElementById("toPDFFile");
       var opt = {
-        margin: 0.5,
+        margin: 20,
         filename: this.busName + " QR Code.pdf",
         image: { type: "jpeg", quality: 0.98 },
         html2canvas: { scale: 2 },
         enableLinks: true,
-        jsPDF: { unit: "pt", format: [400, 600], orientation: "p" },
+        jsPDF: { unit: "pt", format: [400, 650], orientation: "p" },
       };
-      html2pdf()
-        .set(opt)
-        .from(element)
-        .save();
+      html2pdf().set(opt).from(element).save();
     },
   },
 };
@@ -406,9 +436,10 @@ h1 {
   font-family: "Montserrat", sans-serif;
   font-weight: 800;
   font-size: 40px;
-  color: #000000
+  color: #000000;
 }
-h4, h5 {
+h4,
+h5 {
   font-family: "Montserrat", sans-serif;
   font-weight: 800;
   color: #000000;
