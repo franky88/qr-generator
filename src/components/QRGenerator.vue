@@ -389,7 +389,7 @@ export default {
     savePDF() {
       var element = document.getElementById("toPDFFile");
       var opt = {
-        margin: 20,
+        margin: 30,
         filename: this.busName + " QR Code.pdf",
         image: { type: "jpeg", quality: 0.98 },
         html2canvas: { scale: 2 },
